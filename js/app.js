@@ -1,7 +1,7 @@
 
 var charAnn, charSarah, buttonPlay, buttonPrev, buttonNext, appContainer;
 
-var controlInfo,controlSetting, OOILayer ,controlMap, loadingTips, playerCharacterArray, instructionsArray, loadingTipsArray, progressBar, controlBars, progressLine, apartmentTitle, controlLayer, controlMap, gameMap, infoText, infoApartmentArray, infoScriptObject, OOIContentArray,  conversationScriptArray;
+var controlInfo, playAgain = false , controlSetting, OOILayer ,controlMap, loadingTips, playerCharacterArray, instructionsArray, loadingTipsArray, progressBar, controlBars, progressLine, apartmentTitle, controlLayer, controlMap, gameMap, infoText, infoApartmentArray, infoScriptObject, OOIContentArray,  conversationScriptArray;
 
 var rentDetails, currentApartment , gameMode , settingOn = false , controlMode ,soundControl ,gameMusicControl , spinned = false, ringOne ,playerChar, ratingDetails, distanceDetails, ammenitiesDetails, tourButton, instructionHUD, instructionTitle, instructionContent, nextButton, spinButton, characterSelectionWidget, widgetTitle, guideHeader, slotMachine, spinButton, charProfile, charAvtar, charProfileName, charProfileSummary, charDetailsList, charDetailsOne, charDetailsTwo, conversationLayer, conversationBubble, speakerName, conversationtext, chairLouiseZero, currentScene, currentSubScene , characterIDArray, conversationScriptArray, contextCount = 0, dialogueCount = 0, sceneWrapper, gameOverlay, sceneTransition = false, machineBackground, apartmentIcon, instructionCount = 0, apartmentInfo;
 
@@ -1248,8 +1248,23 @@ function initGame() {
 
 }
 function resetgame(){
-	navigateScenes(0,0,console.log('there'));
-}
+	
+	location.reload();
+	
+	/*
+	navigateScenes(0,0,function(){
+		instructionHUD.classList.remove('hide');
+		charProfile.classList.add('hide');
+
+		instructionTitle.classList.remove('hide');
+		instructionContent.classList.remove('hide');
+	});
+	controlMap.classList.add('hide');
+	gameOverlay.classList.add('tint');
+	progressBar.classList.remove('tint');
+	
+	navigateInstructions();
+*/}
 function toggleGameMusic() {
 	if (gameMusicControl)
 		if (hasClass(gameMusicControl, 'on')) {
@@ -1258,7 +1273,7 @@ function toggleGameMusic() {
 			gameMusic.pause();
 		} else {
 			gameMusicControl.classList.add('on');
-			soundControl.src = "assets/images/sound-setting.png";
+			soundControl.src = "assets/images/audio-on.png";
 			gameMusic.play();
 		}
 
@@ -1509,6 +1524,7 @@ function hideControls() {
 
 function navigateInstructions() {
 	if (instructionCount < 4) {
+	//	guideHeader.innerText = '';
 		showInstructions(instructionCount);
 		instructionCount = instructionCount + 1;
 
@@ -1535,10 +1551,19 @@ function meetCharacter() {
 }
 function showProgress() {
 	progressBar.classList.remove('hide');
-	// progressLine.style.transform = "scaleX("+progressCurrent+")";
 	loadTips();
-	progressLine.style.width = "53.5%";
-	preLoadNPCImages(); //preload
+	if(playAgain){
+		progressLine.style.transitionDuration = "2s"
+		progressLine.style.width = "53.5%";
+	}else{
+		// progressLine.style.transform = "scaleX("+progressCurrent+")";
+
+		progressLine.style.width = "53.5%";
+		preLoadNPCImages(); //preload
+		playAgain = true;
+	}
+
+
 }
 function loadTips() {
 	loadingTips.innerText = loadingTipsArray[0];
@@ -1714,8 +1739,9 @@ function tourApartment() {
 	}
 	apartmentInfo.classList.add('hide');
 	toggleMap();
-	navigateScenes(currentApartment);
-	//resetgame();
+	
+	//navigateScenes(currentApartment);
+	resetgame();
 }
 
 function navigateScenes(sceneNo,subSceneNo, callBack) {
